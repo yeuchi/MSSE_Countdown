@@ -97,18 +97,18 @@ class Model extends EventBase {
   /*
    * build data for D3.js calendar view
    */
-  get data4D3()
+  buildData4D3(dateStr)
   {
     try
     {
-      var today = new Date();
+      var dateSelected = new Date(dateStr);
       var d3Data = [];
       this.classDays.forEach((e) => {
         var iso = e._date.toISOString();
         var dd = iso.split("T");
         if(dd && 2==dd.length)
         {
-          var val = e.compare(today);
+          var val = e.compare(dateSelected);
           d3Data.push({Date:dd[0], test:val});
         }
         else

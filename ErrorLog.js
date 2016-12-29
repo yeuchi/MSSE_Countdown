@@ -1,4 +1,3 @@
-
 /*
  * All uncaught errors are captured here.
  * - provide output options: Console, file or trace ?
@@ -21,6 +20,11 @@ class ErrorLog {
   }
 }
 
+/*
+ * Error class
+ *
+ * - container of an error message
+ */
 class Error {
   constructor(errorMsg, classFunction, lineNumber)
   {

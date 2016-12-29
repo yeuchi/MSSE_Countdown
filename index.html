@@ -51,53 +51,84 @@
             // 12/26/2016 -- Class extends & Windows.error()
             // 12/27/2016 -- Mike Bostock's D3 js Calendar view
             // 12/28/2016 -- private members (not available yet)
-            // 12/29/2016 -- text field auto populate
+            // 12/29/2016 -- update date selection, text field auto populate
+            
             $(document).ready(function() {
                 
-                // instantiate objects
+                // instantiate class objects
                 let errorLog = new ErrorLog();
                 let event = new Event();
                 let model = new Model();
                 let dateInput = new DateInput(".inDate");
                 let calendar = new CalendarView();
                 
-                // load input file
+                // load input file -- may want to change this to load/parse from MSSE site directly !?
                 model.openJsonFile("schedule.json");
                 
-                // post data load
-                function OnCompleteMarshalHandler(msg, event) {
+                /*
+                 * Website view rendering -- make a view class for this ?
+                 */
+                function renderView(dateStr) {
+                    // calculate time remaining
+                    let downCount = new DownCount(model, dateStr);
+                    
+                    // days remaining
+                    $(".daysRemain").text(("Days remain: "+downCount.daysRemain));
+                    
+                    // hours remaining
+                    $(".hoursRemain").text(("Hours remain: "+downCount.hoursRemain));
+                    
+                    // minutes remaining
+                    $(".minutesRemain").text(("Minutes remain: "+downCount.minutesRemain));
+                    
+                    // percent remaining -- draw a bar 
+                    $(".PercentRemain").text(("Percent remain: "+downCount.percentRemain));
+                    
+                    // build data for calendar view
+                    var data = model.buildData4D3(dateStr);
+                    calendar.render(data);
+                }
+                
+                /*
+                 * MSSE schedule has been loaded
+                 */
+                function OnCompleteMarshalHandler(msg,     // event type
+                                                  event) { // actual event and content
                     
                     if(model.marshal(event.data))
                     {
-                        // calculate time remaining
-                        let downCount = new DownCount(model);
-                        
-                        // days remaining
-                        $(".daysRemain").text(("Days remain: "+downCount.daysRemain));
-                        
-                        // hours remaining
-                        $(".hoursRemain").text(("Hours remain: "+downCount.hoursRemain));
-                        
-                        // minutes remaining
-                        $(".minutesRemain").text(("Minutes remain: "+downCount.minutesRemain));
-                        
-                        // percent remaining -- draw a bar 
-                        $(".PercentRemain").text(("Percent remain: "+downCount.percentRemain));
-                        
-                        calendar.render(model.data4D3);
+                        renderView(dateInput.todayDateStr);
                     }
                 }
                 
-                // known error
-                function OnLoadErrorHandler(msg, event) {
+                /*
+                 * someone changed the date -> go re-render
+                 */
+                function OnChangeDateInputHandler(msg,     // event type
+                                                  event) { // actual event and content
+                    
+                    renderView(event.data);
+                }
+                
+                /*
+                 * known error occurred
+                 */
+                function OnLoadErrorHandler(msg,     // event type
+                                            event) { // actual event and content
                     errorLog.push(event.data, event.classFunction, event.lineNumber);
                 }
                 
-                // unexpected error
-                window.onerror = function (errorMsg, url, lineNumber) {
+                /*
+                 * unexpected error occurred
+                 */
+                window.onerror = function (errorMsg,     // error message
+                                           url,          // url or class::method() detail
+                                           lineNumber) { // line number detail
                     errorLog.push(errorMsg, url, lineNumber);
                 }
                 
+                // Event listeners
+                $(document).bind(event.OnChangeDateInput, OnChangeDateInputHandler); 
                 $(document).bind(event.OnCompleteMarshal, OnCompleteMarshalHandler); 
                 $(document).bind(event.OnLoadError, OnLoadErrorHandler); 
             });

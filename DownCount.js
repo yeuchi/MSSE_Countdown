@@ -1,8 +1,12 @@
+/*
+ * DownCount class - business logic
+ */
 class DownCount {
   
-  constructor(model)
+  constructor(model, dateStr)
   {
     this._model = model;
+    this._dateSelected = new Date(dateStr);
   }
   
   /*
@@ -10,11 +14,8 @@ class DownCount {
    */
   get daysRemain()
   {
-    // *** need to count today if today's class session has NOT started.
-    var now = new Date();
-    
     // find all class days to come
-    var classDays = this.findClassDaysAfter(now);
+    var classDays = this.findClassDaysAfter(this._dateSelected);
     
     return classDays.length;
   }
@@ -32,13 +33,12 @@ class DownCount {
    */
   get minutesRemain()
   {
-    var now = new Date();
-    
+    // -- this NEEDS to be finished !
     // if today is a class day -- parse today's remaining 
-    var todayClassDay = this.findClassDay(now);
+    var todayClassDay = this.findClassDay(this._dateSelected);
     
     // find all class days to come
-    var classDays = this.findClassDaysAfter(now);
+    var classDays = this.findClassDaysAfter(this._dateSelected);
     
     // calculate time
     var minutesTotal = 0;

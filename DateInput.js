@@ -1,30 +1,17 @@
-class DateInput extends EventBase {
+/*
+ * DateInput class
+ *
+ * - Everything supporting the date input text field
+ */
+class DateInput {
     
     constructor(dateClass)
     {
-        super();
+        this._eventBase = new EventBase();
         this._dateClass = dateClass;
         
-        this.initValue();
         this.initHandler();
-    }
-    
-    /*
-     * Initialize the change handler
-     */
-    initHandler()
-    {
-        try
-        {
-            // input change
-            $(this._dateClass).on("change", function(e) {
-                // validator
-            });
-        }
-        catch(e)
-        {
-            super.dispatchIfError(e.toString(), "DateInput::initHandler()", 20);
-        }
+        this.initValue();
     }
     
     /*
@@ -35,15 +22,58 @@ class DateInput extends EventBase {
         try
         {
             var input = $(this._dateClass)[0];
-            input.value = this.todayDate;
+            input.value = this.todayDateStr;
+            
+            var event = new Event();
+            this_eventBase.dispatch(event.OnChangeDateInput, date, "DateInput::onChange()", 44);
         }
         catch(e)
         {
-            super.dispatchIfError(e.toString(), "DateInput::initValue()", 37);
+            this._eventBase.dispatchIfError(e.toString(), "DateInput::initValue()", 44);
         }
     }
     
-    get todayDate()
+    /*
+     * Initialize the change handler
+     */
+    initHandler()
+    {
+        try
+        {
+            // input change
+            $(this._dateClass).on("change", this.onChangeHandler);
+        }
+        catch(e)
+        {
+            this._eventBase.dispatchIfError(e.toString(), "DateInput::initHandler()", 20);
+        }
+    }
+    
+    /*
+     * Date input field change handler
+     */
+    onChangeHandler(e)
+    {
+        var eventBase = new EventBase();
+
+        try
+        {
+            // validator
+            var date = new Date(e.currentTarget.value);
+            if(!date || !date.getTime())
+                throw "DateInput::onChangeHandler() invalid date";
+            
+            // dispatch changed date for application update
+            var event = new Event();
+            eventBase.dispatch(event.OnChangeDateInput, date.toISOString(), "DateInput::onChangeHandler()", 53);
+        }
+        catch(e)
+        {
+            eventBase.dispatchIfError(e.toString(), "DateInput::onChangeHandler()", 53);
+        }
+    }
+    
+    get todayDateStr()
     {
         var today = new Date().toISOString().split("T");
         return today[0];

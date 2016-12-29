@@ -1,5 +1,3 @@
-
-
 /*
  * MSSE ClassDay representation
  */

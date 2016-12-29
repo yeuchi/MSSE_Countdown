@@ -1,11 +1,15 @@
 /*
- * An event
+ * Event class
+ *
+ * - a broadcasting event
  */
 class Event {
   constructor()
   {
     this.OnCompleteMarshal = "OnCompleteMarshal";
     this.OnLoadError = "OnLoadError";
+    
+    this.OnChangeDateInput = "OnChangeDateInput";
   }
   
   setContent(eventType,
