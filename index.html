@@ -38,6 +38,7 @@
         <script src="http://d3js.org/d3.v3.min.js"></script>
         <script src="ErrorLog.js"></script>
         <script src="Event.js"></script>
+        <script src="DateInput.js"></script>
         <script src="Calendar.js"></script>
         <script src="ClassSession.js"></script>
         <script src="ClassDay.js"></script>
@@ -53,15 +54,11 @@
             // 12/29/2016 -- text field auto populate
             $(document).ready(function() {
                 
-                // input change
-                $(".inDate").on("change", function(e) {
-                    // validator
-                });
-                
                 // instantiate objects
                 let errorLog = new ErrorLog();
                 let event = new Event();
                 let model = new Model();
+                let dateInput = new DateInput(".inDate");
                 let calendar = new CalendarView();
                 
                 // load input file
