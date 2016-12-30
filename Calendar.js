@@ -10,7 +10,6 @@ class CalendarView {
     this.width = 960;
     this.height = 136;
 
-    this.percent = d3.format(".1%");
     this.format = d3.time.format("%Y-%m-%d");
     
     this.color = d3.scale.quantize()
@@ -55,20 +54,18 @@ class CalendarView {
   { 
     if(csv)
     {
-      var data = d3.nest()
-        .key(function(d) { return d.Date; })
-        //.rollup(function(d) { return (d[0].Close - d[0].Open) / d[0].Open; })
-        .rollup(function(d) { return d[0].test; })
-        .map(csv);
-    
       var color = this.color;
-      var percent = this.percent;
-      this.rect.filter(function(d) { return d in data; })
-          .attr("class", function(d) { return "day " + color(data[d]); })
+      this.rect.filter(function(d) {
+                        return d in csv;
+                      })
+          .attr("class", function(d) {
+                          return "day " + color(csv[d].code);
+                        })
         .select("title")
-          .text(function(d) { return d + ": " + percent(data[d]); });
+          .text(function(d) {
+                  return d + ": " + Math.round(csv[d].percent)+"%";
+                });
     }
-  
   }
   
   monthPath(t0) {

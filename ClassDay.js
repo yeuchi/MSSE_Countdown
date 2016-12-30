@@ -96,7 +96,8 @@ class ClassDay extends EventBase {
     try
     {
       date = this.filterTime(date);
-      var diff = date.valueOf() - this._date.valueOf();
+      var thisDate = this.filterTime(this._date);
+      var diff = thisDate.valueOf() - date.valueOf();
       
       if(0==diff)
         return 0;

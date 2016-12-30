@@ -102,16 +102,20 @@ class Model extends EventBase {
     try
     {
       var dateSelected = new Date(dateStr);
-      var d3Data = [];
+      var d3Data = {};
+      var numClasses = this.numClassDays;
+      var index = 0;
+      
       this.classDays.forEach((e) => {
+        index ++;
         var iso = e._date.toISOString();
         var dd = iso.split("T");
         if(dd && 2==dd.length)
         {
           var val = e.compare(dateSelected);
           var status = this.mapD3Color(val);
-          
-          d3Data.push({Date:dd[0], test:status});
+          var p = index / numClasses * 100;
+          d3Data[dd[0]] = {code:status, percent:p};
         }
         else
           throw "Model::get data3D3() invalid dd.";
@@ -133,13 +137,13 @@ class Model extends EventBase {
     switch(val)
     {
       case 0:
-        return 0.5;
+        return 0;
       
       case 1:
-        return 1;
+        return -.03;
       
       case -1:
-        return 0;
+        return 1;
     }
   }
 }
