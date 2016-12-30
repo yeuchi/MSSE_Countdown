@@ -63,6 +63,8 @@ class DateInput {
             if(!date || !date.getTime())
                 throw "DateInput::onChangeHandler() invalid date";
             
+            // need to validate date (i.e. 2-28)
+            
             // dispatch changed date for application update
             var event = new Event();
             eventBase.dispatch(event.OnChangeDateInput, date.toISOString(), "DateInput::onChangeHandler()", 53);

@@ -95,23 +95,36 @@ class ClassDay extends EventBase {
   {
     try
     {
-      if(this._date.getYear() == date.getYear() &&
-         this._date.getMonth() == date.getMonth() &&
-         this._date.getDate() == date.getDate())
-          return 0;
-        
-      if(this._date.getYear() <= date.getYear() &&
-         this._date.getMonth() <= date.getMonth() &&
-         this._date.getDate() <= date.getDate())
-          return -1;
-        
-      else
+      date = this.filterTime(date);
+      var diff = date.valueOf() - this._date.valueOf();
+      
+      if(0==diff)
+        return 0;
+       
+      if(0<diff)
         return 1;
-        
+      
+      else
+        return -1;
     }
     catch(e)
     {
       super.dispatchIfError(e.toString(), "ClassDays::compare()", 152);
+    }
+    return null;
+  }
+  
+  filterTime(date)
+  {
+    try
+    {
+      var dateArray = date.toISOString().split("T");
+      var dateStr = new Date(dateArray[0]);
+      return new Date(dateStr);
+    }
+    catch(e)
+    {
+      super.dispatchIfError(e.toString(), "ClassDays::removeDateTime()", 121);
     }
     return null;
   }

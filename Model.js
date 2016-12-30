@@ -109,7 +109,9 @@ class Model extends EventBase {
         if(dd && 2==dd.length)
         {
           var val = e.compare(dateSelected);
-          d3Data.push({Date:dd[0], test:val});
+          var status = this.mapD3Color(val);
+          
+          d3Data.push({Date:dd[0], test:status});
         }
         else
           throw "Model::get data3D3() invalid dd.";
@@ -121,6 +123,24 @@ class Model extends EventBase {
         super.dispatchIfError(e.toString(), "Model::marshal()", 70);
     }
     return null;
+  }
+  
+  /*
+   * Map date to D3 calendar color
+   */
+  mapD3Color(val)
+  {
+    switch(val)
+    {
+      case 0:
+        return 0.5;
+      
+      case 1:
+        return 1;
+      
+      case -1:
+        return 0;
+    }
   }
 }
 
