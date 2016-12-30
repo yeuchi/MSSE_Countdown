@@ -59,9 +59,7 @@ class DateInput {
             // validator
             var date = new Date(e.currentTarget.value);
             if(!date || !date.getTime())
-                throw "DateInput::onChangeHandler() invalid date";
-            
-            // need to validate date (i.e. 2-28)
+                throw "DateInput::onChangeHandler() invalid date -- Click day on Calendar !!";
             
             // dispatch changed date for application update
             var event = new Event();
