@@ -7,6 +7,7 @@ var cellSize = 17;
 class CalendarView {
   constructor()
   {
+    this._eventBase = new EventBase();
     this.width = 960;
     this.height = 136;
 
@@ -48,6 +49,38 @@ class CalendarView {
       .enter().append("path")
         .attr("class", "month")
         .attr("d", this.monthPath);
+        
+    this.initHandler();     
+  }
+  
+  /*
+   * Initialize the click handler
+   */
+  initHandler()
+  {
+      try
+      {
+          $(".day").on("click", this.onClickHandler);
+      }
+      catch(e)
+      {
+          this._eventBase.dispatchIfError(e.toString(), "Calendar::initHandler()", 62);
+      }
+  }
+  
+  onClickHandler(e)
+  {
+    var eventBase = new EventBase();
+
+    try
+    {
+      var event = new Event();
+      eventBase.dispatch(event.OnClickDay, e.currentTarget.__data__, "Calendar::onClickHandler()", 73);
+    }
+    catch(e)
+    {
+      eventBase.dispatchIfError(e.toString(), "Calendar::onClickHandler()", 73);
+    }
   }
   
   render(csv)

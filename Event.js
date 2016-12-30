@@ -10,6 +10,7 @@ class Event {
     this.OnLoadError = "OnLoadError";
     
     this.OnChangeDateInput = "OnChangeDateInput";
+    this.OnClickDay = "OnClickDay";
   }
   
   setContent(eventType,

@@ -58,7 +58,7 @@
                 let errorLog = new ErrorLog();
                 let event = new Event();
                 let model = new Model();
-                let dateInput = new DateInput(".inDate");
+                let dateInput = new DateInput(".inDate", new Date().toISOString());
                 let calendar = new CalendarView();
                 
                 // load input file -- may want to change this to load/parse from MSSE site directly !?
@@ -96,7 +96,7 @@
                     
                     if(model.marshal(event.data))
                     {
-                        renderView(dateInput.todayDateStr);
+                        renderView(dateInput.selectedDateStr);
                     }
                 }
                 
@@ -106,7 +106,18 @@
                 function OnChangeDateInputHandler(msg,     // event type
                                                   event) { // actual event and content
                     
-                    renderView(event.data);
+                    renderView(dateInput.selectedDateStr);
+                }
+                
+                /*
+                 * someone changed the date -> go re-render
+                 */
+                function OnClickDayHandler(msg,     // event type
+                                           event) { // actual event and content
+                    
+                    var dateStr = event.data;
+                    dateInput = new DateInput(".inDate", dateStr);
+                    renderView(dateInput.selectedDateStr);
                 }
                 
                 /*
@@ -128,8 +139,9 @@
                 
                 // Event listeners
                 $(document).bind(event.OnChangeDateInput, OnChangeDateInputHandler); 
+                $(document).bind(event.OnClickDay, OnClickDayHandler); 
                 $(document).bind(event.OnCompleteMarshal, OnCompleteMarshalHandler); 
-                $(document).bind(event.OnLoadError, OnLoadErrorHandler); 
+                $(document).bind(event.OnLoadError, OnLoadErrorHandler);
             });
             
         </script>

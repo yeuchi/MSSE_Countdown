@@ -5,10 +5,11 @@
  */
 class DateInput {
     
-    constructor(dateClass)
+    constructor(dateClass, dateStr)
     {
         this._eventBase = new EventBase();
         this._dateClass = dateClass;
+        this._dateSelected = new Date(dateStr);
         
         this.initHandler();
         this.initValue();
@@ -22,10 +23,7 @@ class DateInput {
         try
         {
             var input = $(this._dateClass)[0];
-            input.value = this.todayDateStr;
-            
-            var event = new Event();
-            this_eventBase.dispatch(event.OnChangeDateInput, date, "DateInput::onChange()", 44);
+            input.value = this.selectedDateStr;
         }
         catch(e)
         {
@@ -75,9 +73,9 @@ class DateInput {
         }
     }
     
-    get todayDateStr()
+    get selectedDateStr()
     {
-        var today = new Date().toISOString().split("T");
-        return today[0];
+        var dateArray = this._dateSelected.toISOString().split("T");
+        return dateArray[0];
     }
 }

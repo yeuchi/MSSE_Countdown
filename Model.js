@@ -143,7 +143,7 @@ class Model extends EventBase {
         return -.03;
       
       case -1:
-        return 1;
+        return .03;
     }
   }
 }
