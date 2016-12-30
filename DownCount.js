@@ -54,8 +54,8 @@ class DownCount {
    */
   get percentRemain()
   {
-    // do the calculation
-    return 2;
+    var percent = this.minutesRemain / this._model.totalClassTimeInMinutes * 100;
+    return percent;
   }
     
   /*

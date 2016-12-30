@@ -33,6 +33,12 @@
             </div>
         </div>
         
+        <div class="divSVG"></div>
+        
+        <div id="myProgress">
+            <div id="myBar"></div>
+        </div>
+        
         <script src="jquery-3.1.1.js"></script>
         <script src="d3.js"></script>
         <script src="ErrorLog.js"></script>
@@ -80,8 +86,11 @@
                     // minutes remaining
                     $(".minutesRemain").text(("Minutes remain: "+downCount.minutesRemain));
                     
-                    // percent remaining -- draw a bar 
-                    $(".PercentRemain").text(("Percent remain: "+downCount.percentRemain));
+                    // percent remaining -- draw a bar
+                    var percent = Math.round(downCount.percentRemain);
+                    $(".percentRemain").text(("Percent remain: "+percent));
+                    
+                    $("#myBar").css("width", ((100-percent)+"%"));
                     
                     // build data for calendar view
                     var data = model.buildData4D3(dateStr);

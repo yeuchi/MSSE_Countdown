@@ -17,7 +17,7 @@ class CalendarView {
         .domain([-.05, .05])
         .range(d3.range(11).map(function(d) { return "q" + d + "-11"; }));
     
-    this.svg = d3.select("body").selectAll("svg")
+    this.svg = d3.select(".divSVG").selectAll("svg")
         .data(d3.range(2017, 2018))
       .enter().append("svg")
         .attr("width", this.width)

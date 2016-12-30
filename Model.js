@@ -94,6 +94,16 @@ class Model extends EventBase {
     return 0;
   }
   
+  get totalClassTimeInMinutes()
+  {
+    var totalMinutes = 0;
+    
+    this.classDays.forEach((e) => {
+      totalMinutes += e.classTimeInMinutes;
+    });
+    return totalMinutes;
+  }
+  
   /*
    * build data for D3.js calendar view
    */
