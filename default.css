@@ -36,19 +36,24 @@
 }
 
 .divLeft {
-  width:20em;
-  height:5em;
+  height:8em;
   bottom: 0;
   display: block;
   position:absolute;
   /*border: 1px solid red;*/
 }
 
+.percentRemain {
+  padding-left: 3em;
+  padding-top: 1em;
+}
+
 .divRight {
   display:block;
   position: absolute;
-  height:8em;
-  left:40em;
+  width:20em;
+  height:5em;
+  left:40em; 
   bottom:0;
   /*border: 1px solid blue;*/
 }

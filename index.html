@@ -21,20 +21,20 @@
         
         <div class="divAttr">
             <div class="divLeft">
-                Enter Date: <input class="inDate" type="text" name="fname">
-     
-            </div>
-            
-            <div class="divRight">
                 <p class="daysRemain"></p>
                 <p class="hoursRemain"></p>
                 <p class="minutesRemain"></p>
-                <p class="percentRemain"></p>
+            </div>
+            
+            <div class="divRight">
+                Enter Date: <input class="inDate" type="text" name="fname">
             </div>
         </div>
         
         <div class="divSVG"></div>
         
+        <p class="percentRemain"></p>
+
         <div id="myProgress">
             <div id="myBar"></div>
         </div>
@@ -87,10 +87,10 @@
                     $(".minutesRemain").text(("Minutes remain: "+downCount.minutesRemain));
                     
                     // percent remaining -- draw a bar
-                    var percent = Math.round(downCount.percentRemain);
-                    $(".percentRemain").text(("Percent remain: "+percent));
+                    var percent = 100 - Math.round(downCount.percentRemain);
+                    $(".percentRemain").text("Percent completed: "+percent);
                     
-                    $("#myBar").css("width", ((100-percent)+"%"));
+                    $("#myBar").css("width", (percent+"%"));
                     
                     // build data for calendar view
                     var data = model.buildData4D3(dateStr);
