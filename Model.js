@@ -1,11 +1,22 @@
+/*
+ * Module:  Model
+ *
+ * Description: Data Model for MSSE time remaining
+ *
+ *              class schedule does not include commencement
+ *              https://www.msse.umn.edu/spring-2017-class-schedule-class-2017
+ *
+ * Author(s):   C.T. Yeung
+ *
+ * Date:        29Dec16
+ * 
+ * Copyright (c) 2016 MSSE Authors. All rights reserved.
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file. See the AUTHORS file for names of contributors.
+ */
+
 'use strict';
 
-/*
- * Data Model for MSSE time remaining
- *
- * class schedule does not include commencement
- * https://www.msse.umn.edu/spring-2017-class-schedule-class-2017
- */
 class Model extends EventBase {
   constructor()
   {

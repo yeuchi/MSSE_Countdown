@@ -1,6 +1,17 @@
 /*
- * Mike Bostock's Calendar view
- * - http://bl.ocks.org/mbostock/4063318
+ * Module:      CalendarView
+ *
+ * Description: Mike Bostock's Calendar view
+ *              http://bl.ocks.org/mbostock/4063318
+ *
+ * Author(s):   Mike Bostock
+ *              C.T. Yeung - editor
+ *
+ * Date:        29Dec16
+ * 
+ * Copyright (c) 2016 MSSE Authors. All rights reserved.
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file. See the AUTHORS file for names of contributors.
  */
 var cellSize = 17;
 

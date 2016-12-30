@@ -1,7 +1,17 @@
 /*
- * All uncaught errors are captured here.
- * - provide output options: Console, file or trace ?
- * - should provide verbosity setting someday.
+ * Module:      ErrorLog
+ *
+ * Description: All uncaught errors are captured here.
+ *              - provide output options: Console, file or trace ?
+ *              - should provide verbosity setting someday.
+ *  
+ * Author(s):   C.T. Yeung
+ *
+ * Date:        29Dec16
+ * 
+ * Copyright (c) 2016 MSSE Authors. All rights reserved.
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file. See the AUTHORS file for names of contributors.
  */
 class ErrorLog {
   
