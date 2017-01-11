@@ -14,46 +14,22 @@
 class Event {
   constructor()
   {
-    this._eventType = "";
-    this._data = null;
-    this._classFunction = null;
-    this._lineNumber = null;
+    this.OnCompleteMarshal = "OnCompleteMarshal";
+    this.OnLoadError = "OnLoadError";
+    
+    this.OnChangeDateInput = "OnChangeDateInput";
+    this.OnClickDay = "OnClickDay";
   }
-  
-  static get MSG_BINARY_FILE_LOADED() {return "MSG_BINARY_FILE_LOADED";}
-  static get MSG_JSON_FILE_LOADED() {return "MSG_JSON_FILE_LOADED";}
-  static get MSG_PROGRESS() {return "MSG_PROGRESS";}
-  static get MSG_ERROR() {return "MSG_ERROR";}
   
   setContent(eventType,
              data,
              classFunction,
              lineNumber)
   {
-    this._eventType = eventType;
-    this._data = data;
-    this._classFunction = classFunction;
-    this._lineNumber = lineNumber;
-  }
-  
-  get data()
-  {
-    return this._data;
-  }
-  
-  get classFunction()
-  {
-    return this._classFunction;
-  }
-  
-  get lineNumber()
-  {
-    return this._lineNumber;
-  }
-  
-  get eventType()
-  {
-    return this._eventType;
+    this.eventType = eventType;
+    this.data = data;
+    this.classFunction = classFunction;
+    this.lineNumber = lineNumber;
   }
 }
 
@@ -73,7 +49,7 @@ class EventBase {
   dispatchIfError(errorMsg, classFunction, lineNumber)
   {
     if(errorMsg)
-      this.dispatch(Event.MSG_ERROR, errorMsg, classFunction, lineNumber);
+      this.dispatch("OnLoadError", errorMsg, classFunction, lineNumber);
   }
   
   dispatch(eventType, msg, classFunction, lineNumber)
