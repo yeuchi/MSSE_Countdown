@@ -1,21 +1,22 @@
 <!--
-// MSSE 2017 spring semester count down
+// Module:      Convolution
+//
+// Description: Exercise of event architecture, ES6, design patterns and convolution
+//
+// Notes:       Not sure why I am wasting time with old outdated windows bitmap format.
 //
 // Author: C.T. Yeung
 //
 // Date: 29Dec16
 //
-// exercise on ES6 -- MSSE down counter for last semester
-// prior -- ES6 class, scope & var differences, 'let', getter, setter
-// 12/26/2016 -- Class extends & Windows.error()
-// 12/27/2016 -- Mike Bostock's D3 js Calendar view
-// 12/28/2016 -- private members (not available yet)
-// 12/29/2016 -- update date selection, text field auto populate
+// 06Jan16 - working on bmp decoder; convolution w/ multiple kernels.
+// 08Jan16 - 24bpp Windows bitmap load, render-canvas ok.
 //
 // Copyright (c) 2016 MSSE Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file. See the AUTHORS file for names of contributors.
 -->
+
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -24,7 +25,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>MSSE Class 2017: Spring</title>
+        <title>Convolution</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="default.css" />
@@ -35,38 +36,41 @@
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
 
-        <!-- Add your site or application content here -->
-        
-        <div class="divAttr">
-            <div class="divLeft">
-                <p class="daysRemain"></p>
-                <p class="hoursRemain"></p>
-                <p class="minutesRemain"></p>
-            </div>
-            
-            <div class="divRight">
-                Enter Date: <input class="inDate" type="text" name="fname">
-            </div>
-        </div>
-        
-        <div class="divSVG"></div>
-        
-        <p class="percentRemain"></p>
-
+        <!-- progress -->
         <div id="myProgress">
             <div id="myBar"></div>
         </div>
+
+        <!-- image loaded -->
+        <div class="divImage">
+            <canvas id="canvas0" width="500", height="500"></canvas>
+            <canvas id="canvas1" width="500", height="500"></canvas>
+        </div>
+        
+        <!-- image information -->        
+        <div class="divAttr">
+            
+        </div>
+        
+        <!-- convolution -->
+        <div class="divConvolve">
+            <!-- kernel -->
+            
+        </div>
+                
+        
+        
         
         <script src="jquery-3.1.1.js"></script>
-        <script src="d3.js"></script>
         <script src="ErrorLog.js"></script>
         <script src="Event.js"></script>
-        <script src="DateInput.js"></script>
-        <script src="Calendar.js"></script>
-        <script src="ClassSession.js"></script>
-        <script src="ClassDay.js"></script>
+        <script src="BitmapView.js"></script>
+        <script src="KernelView.js"></script>
+        <script src="WindowsBitmap.js"></script>
+        <script src="Image.js"></script>
         <script src="Model.js"></script>
-        <script src="DownCount.js"></script>
+        <script src="Kernel.js"></script>
+        <script src="Convolution.js"></script>
 
         <script>
             
@@ -74,78 +78,68 @@
                 
                 // instantiate class objects
                 let errorLog = new ErrorLog();
-                let event = new Event();
-                let model = new Model();
-                let dateInput = new DateInput(".inDate", new Date().toISOString());
-                let calendar = new CalendarView();
+                var canvasList = [];
+                canvasList[0] = document.getElementById("canvas0");
+                canvasList[1] = document.getElementById("canvas1");
+                let model = new Model(canvasList);
                 
-                // load input file -- may want to change this to load/parse from MSSE site directly !?
-                model.openJsonFile("schedule.json");
+                $("#myBar").css("width", (0+"%"));
+
                 
+                // will add control for file browse.
+                var xhr = model.openBinaryFile("lena.bmp", 0);
+                    
                 /*
-                 * Website view rendering -- make a view class for this ?
+                 * binary file load successfully, decode bmp data
                  */
-                function renderView(dateStr) {
-                    // calculate time remaining
-                    let downCount = new DownCount(model, dateStr);
+                function OnLoadHandler(msg,     // event type
+                                       event) { // actual event and content
                     
-                    // days remaining
-                    $(".daysRemain").text(("Days remain: "+downCount.daysRemain));
-                    
-                    // hours remaining
-                    $(".hoursRemain").text(("Hours remain: "+downCount.hoursRemain));
-                    
-                    // minutes remaining
-                    $(".minutesRemain").text(("Minutes remain: "+downCount.minutesRemain));
-                    
-                    // percent remaining -- draw a bar
-                    var percent = 100 - Math.round(downCount.percentRemain);
-                    $(".percentRemain").text("Percent completed: "+percent);
-                    
-                    $("#myBar").css("width", (percent+"%"));
-                    
-                    // build data for calendar view
-                    var data = model.buildData4D3(dateStr);
-                    calendar.render(data);
-                }
-                
-                /*
-                 * MSSE schedule has been loaded
-                 */
-                function OnCompleteMarshalHandler(msg,     // event type
-                                                  event) { // actual event and content
-                    
-                    if(model.marshal(event.data))
+                    switch(msg.type)
                     {
-                        renderView(dateInput.selectedDateStr);
+                        case Event.MSG_JSON_FILE_LOADED:
+                            if(model.marshalJSON(event.data))
+                            {
+                                // set up kernel and configurations
+                            }
+                            break;
+                        
+                        case Event.MSG_BINARY_FILE_LOADED:
+                            // go render it !
+                            if(model.marshalBinary(event.data, 0))
+                            {
+                                // perform convolution !
+                                var kernelsContainer = new KernelsContainer();
+                                kernelsContainer.createDefault();
+                                
+                                var convolution = new ConvolutionFilter(kernelsContainer);
+                                var imageList = model.imageList;
+                                var src = imageList[0];
+                                var des = imageList[1];
+                                convolution.apply(src, des);
+                            }
+                            break;
                     }
-                }
-                
-                /*
-                 * someone changed the date -> go re-render
-                 */
-                function OnChangeDateInputHandler(msg,     // event type
-                                                  event) { // actual event and content
                     
-                    renderView(dateInput.selectedDateStr);
                 }
                 
                 /*
-                 * someone changed the date -> go re-render
+                 * load progress update
                  */
-                function OnClickDayHandler(msg,     // event type
+                function OnProgressHandler(msg,     // event type
                                            event) { // actual event and content
-                    
-                    var dateStr = event.data;
-                    dateInput = new DateInput(".inDate", dateStr);
-                    renderView(dateInput.selectedDateStr);
+                    if(event)
+                    {
+                        var percent = event.data.loaded / event.data.total * 100;
+                        $("#myBar").css("width", (percent+"%"));
+                    }
                 }
                 
                 /*
                  * known error occurred
                  */
-                function OnLoadErrorHandler(msg,     // event type
-                                            event) { // actual event and content
+                function OnErrorHandler(msg,     // event type
+                                        event) { // actual event and content
                     errorLog.push(event.data, event.classFunction, event.lineNumber);
                 }
                 
@@ -159,10 +153,10 @@
                 }
                 
                 // Event listeners
-                $(document).bind(event.OnChangeDateInput, OnChangeDateInputHandler); 
-                $(document).bind(event.OnClickDay, OnClickDayHandler); 
-                $(document).bind(event.OnCompleteMarshal, OnCompleteMarshalHandler); 
-                $(document).bind(event.OnLoadError, OnLoadErrorHandler);
+                $(document).bind(Event.MSG_JSON_FILE_LOADED, OnLoadHandler); 
+                $(document).bind(Event.MSG_BINARY_FILE_LOADED, OnLoadHandler); 
+                $(document).bind(Event.MSG_PROGRESS, OnProgressHandler); 
+                $(document).bind(Event.MSG_ERROR, OnErrorHandler);
             });
             
         </script>
